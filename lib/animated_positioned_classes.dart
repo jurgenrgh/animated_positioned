@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'puzzle_globals.dart' as globals;
+import 'puzzle_functions.dart';
 
 class Board {
   static final tiles = List.generate(
@@ -17,23 +18,25 @@ class Board {
   }
 }
 
-class tile extends StatefulWidget {
+class Tile extends StatefulWidget {
   final int id;
   int row;
   int col;
 
-  tile({required this.id, this.row = 1, this.col = 1, Key? key})
+  Tile({required this.id, this.row = 1, this.col = 1, Key? key})
       : super(key: key);
 
   @override
-  _tileState createState() => _tileState();
+  _TileState createState() => _TileState();
 }
 
-class _tileState extends State<tile> {
+class _TileState extends State<Tile> {
   var totalTiles = globals.nbrRows * globals.nbrColumns;
-
   @override
   Widget build(BuildContext context) {
+    Color _color = globals.tileColors[getTileColor(
+      Board.tiles[widget.row][widget.col],
+    )];
     return AnimatedPositioned(
       width: globals.tileSize,
       height: globals.tileSize,
@@ -75,10 +78,11 @@ class _tileState extends State<tile> {
         },
         child: Container(
           margin: const EdgeInsets.all(2.0),
-          color: Colors.blue,
+          color: _color,
           child: Center(
             child: Text(
               '${widget.id}',
+              style: TextStyle(fontSize: globals.tileSize / 2),
             ),
           ),
         ),

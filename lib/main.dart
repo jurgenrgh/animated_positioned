@@ -50,12 +50,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     Board.initTiles(globals.nbrRows, globals.nbrColumns);
     return Container(
-      // decoration: BoxDecoration(
-      //   //color: Colors.black,
-      //   border: Border.all(
-      //     color: Colors.red, // red as border color
-      //   ),
-      // ),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        border: Border.all(
+          color: Colors.black, // red as border color
+        ),
+      ),
       child: SizedBox(
         width: globals.nbrColumns * globals.tileSize,
         height: globals.nbrRows * globals.tileSize,
@@ -63,8 +63,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           children: [
             for (int row = 0; row < globals.nbrRows; row++)
               for (int col = 0; col < globals.nbrColumns; col++)
-                if (globals.nbrColumns * row + col + 1 < 25)
-                  tile(
+                if ((globals.nbrColumns * row + col + 1) <
+                    (globals.nbrColumns * globals.nbrRows))
+                  Tile(
                       id: globals.nbrColumns * row + col + 1,
                       col: col,
                       row: row)
