@@ -60,7 +60,7 @@ int getTileColor(int id) {
             ((id - 0.5) / globals.nbrRows).truncate()) %
         2;
   }
-  print("Color: $id, $cix");
+  //print("Color: $id, $cix");
   return cix;
 }
 

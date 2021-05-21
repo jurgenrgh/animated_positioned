@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'puzzle_globals.dart' as globals;
 import 'puzzle_functions.dart';
+import 'dart:math';
 
 class Board {
   static final tiles = List.generate(
@@ -10,11 +11,62 @@ class Board {
       growable: false);
 
   static initTiles(int rows, int cols) {
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        tiles[i][j] = i * cols + j + 1;
+    print("init Tiles called, Flag: ${globals.shuffleFlag}");
+    if (!globals.shuffleFlag) {
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          tiles[i][j] = i * cols + j + 1;
+        }
       }
     }
+    globals.shuffleFlag = false;
+  }
+
+  static int getRandomIx(int max) {
+    var rng = new Random();
+    return rng.nextInt(max);
+  }
+
+  static shuffle(int rows, int cols) {
+    print("Board.Shuffle. ShuffleFlag: ${globals.shuffleFlag}");
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        int i = getRandomIx(rows);
+        int j = getRandomIx(cols);
+        int tem = tiles[i][j];
+        tiles[i][j] = tiles[row][col];
+        tiles[row][col] = tem;
+        print("$i, $j, $row, $col");
+      }
+    }
+    print(Board.tiles);
+  }
+}
+
+class ShuffleButton extends StatelessWidget {
+  final Function doShuffle;
+  ShuffleButton({required this.doShuffle});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        doShuffle();
+        //print("onTap Shuffle Button. ShuffleFlag: ${globals.shuffleFlag}");
+      },
+      child: Container(
+        padding: const EdgeInsets.all(24.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: Colors.amber[500],
+        ),
+        child: Center(
+          child:
+              Text('Shuffle', style: TextStyle(fontSize: globals.tileSize / 4)),
+        ),
+      ),
+    );
   }
 }
 
@@ -31,7 +83,7 @@ class Tile extends StatefulWidget {
 }
 
 class _TileState extends State<Tile> {
-  var totalTiles = globals.nbrRows * globals.nbrColumns;
+  //var totalTiles = globals.nbrRows * globals.nbrColumns;
   @override
   Widget build(BuildContext context) {
     Color _color = globals.tileColors[getTileColor(
@@ -46,7 +98,9 @@ class _TileState extends State<Tile> {
       curve: Curves.fastOutSlowIn,
       child: GestureDetector(
         onTap: () {
-          // print("${widget.row}, ${widget.col}");
+          var totalTiles = globals.nbrRows * globals.nbrColumns;
+          print(
+              "${widget.row}, ${widget.col}, ${totalTiles}, ${globals.nbrSideTiles}");
           setState(() {
             if (((widget.col + 1) < globals.nbrColumns) &&
                 (Board.tiles[widget.row][widget.col + 1] == totalTiles)) {

@@ -5,7 +5,7 @@ import 'dart:math';
 List<Color> tileColors = [Colors.amber, Colors.blue, Colors.black];
 Color evenColor = Colors.amber;
 Color oddColor = Colors.blue;
-Color blankColor = Colors.black;
+Color blankColor = Colors.indigo.shade900;
 
 // User can change anytime per interface
 int nbrRows = 5;
